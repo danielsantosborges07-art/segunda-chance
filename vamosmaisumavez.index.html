@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Quer tentar comigo mais uma vez?</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      position: relative;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 54px;
+      color: #fff; 
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+      z-index: 2;
+      margin-top: 200px;
+    }
+
+    .botoes-container {
+      position: relative;
+      width: 100%;
+      height: 60%;
+      max-width: 600px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    button {
+      padding: 25px 55px;
+      font-size: 28px;
+      cursor: pointer;
+      border: none;
+      border-radius: 15px;
+      transition: all 0.2s;
+      z-index: 2;
+      position: absolute;
+    }
+
+    #sim {
+      background-color: #4CAF50;
+      color: white;
+      left: 25%;
+      top: 35%;
+      box-shadow: 0 0 10px #fff;
+      animation: pulse 2s infinite;
+    }
+
+    #nao {
+      background-color: #f44336;
+      color: white;
+      left: 55%;
+      top: 35%;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #fff; transform: scale(1); }
+      50% { box-shadow: 0 0 25px #fff; transform: scale(1.05); }
+      100% { box-shadow: 0 0 10px #fff; transform: scale(1); }
+    }
+
+    #mensagem {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 204, 203, 0.95);
+      padding: 50px;
+      border-radius: 25px;
+      font-size: 34px;
+      text-align: center;
+      box-shadow: 0 0 25px rgba(0,0,0,0.4);
+      color: #000;
+      animation: fadeIn 0.5s ease;
+      z-index: 9999;
+    }
+
+    #fechar {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translate(-50%, -60%);}
+      to {opacity: 1; transform: translate(-50%, -50%);}
+    }
+
+    .heart {
+      position: fixed;
+      bottom: 0;
+      font-size: 24px;
+      animation: subir 3s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes subir {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+
+    .star {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: gold;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: brilhar 1s ease forwards;
+    }
+
+    @keyframes brilhar {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2); }
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Quer tentar comigo mais uma vez? ❤️</h1>
+
+  <div class="botoes-container">
+    <button id="sim">Sim</button>
+    <button id="nao">Não</button>
+  </div>
+
+  <div id="mensagem">
+    <button id="fechar">X</button>
+    Meus olhos brilham quando eu te vejo sorrir ✨
+  </div>
+
+  <script>
+    const nao = document.getElementById('nao');
+    const sim = document.getElementById('sim');
+    const mensagem = document.getElementById('mensagem');
+    const fechar = document.getElementById('fechar');
+    const container = document.querySelector('.botoes-container');
+
+    function moverBotao() {
+      const margem = 20; 
+      const maxX = container.clientWidth - nao.offsetWidth - margem;
+      const maxY = container.clientHeight - nao.offsetHeight - margem;
+
+      let randomX = Math.floor(Math.random() * maxX);
+      let randomY = Math.floor(Math.random() * maxY);
+
+      nao.style.left = randomX + 'px';
+      nao.style.top = randomY + 'px';
+
+      // criar estrelas fofinhas ao fugir
+      for (let i = 0; i < 5; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.left = (randomX + Math.random()*nao.offsetWidth) + 'px';
+        star.style.top = (randomY + Math.random()*nao.offsetHeight) + 'px';
+        container.appendChild(star);
+        setTimeout(() => star.remove(), 1000);
+      }
+    }
+
+    // PC
+    nao.addEventListener('mouseover', moverBotao);
+
+    // CELULAR
+    nao.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      moverBotao();
+    });
+
+    sim.addEventListener('click', () => {
+      mensagem.style.display = 'block';
+      criarCoracoes();
+    });
+
+    fechar.addEventListener('click', () => {
+      mensagem.style.display = 'none';
+    });
+
+    function criarCoracoes() {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.classList.add('heart');
+          heart.innerText = "❤️";
+          heart.style.left = Math.random() * window.innerWidth + "px";
+          heart.style.fontSize = (20 + Math.random() * 30) + "px";
+          document.body.appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, 3000);
+        }, i * 150);
+      }
+    }
+  </script>
+</body>
+</html>
